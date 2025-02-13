@@ -1,7 +1,7 @@
 export default function Matriculas() {
   return (
     <div>
-      <h2>matriculas</h2>
+      <h2 className="text-2xl font-bold">Matriculas</h2>
     </div>
   );
 }
