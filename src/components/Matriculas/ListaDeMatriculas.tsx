@@ -1,5 +1,5 @@
 "use client";
-import { AlunosDto } from "@/dto/alunosDto";
+
 import { api } from "@/lib/axios";
 import { Pagination } from "@heroui/react";
 import {
@@ -15,99 +15,40 @@ import { Spinner } from "@heroui/spinner";
 import { useMemo, useState } from "react";
 import useSWR from "swr";
 import { toast } from "sonner";
-
-const columns = [
-  {
-    key: "nome",
-    label: "nome",
-  },
-  {
-    key: "sexo",
-    label: "sexo",
-  },
-  {
-    key: "nis",
-    label: "nis",
-  },
-  {
-    key: "dataNascimento",
-    label: "dataNascimento",
-  },
-  {
-    key: "rg",
-    label: "rg",
-  },
-  {
-    key: "cpf",
-    label: "cpf",
-  },
-  {
-    key: "filiacaoMae",
-    label: "filiacaoMae",
-  },
-  {
-    key: "pai",
-    label: "pai",
-  },
-  {
-    key: "responsavel",
-    label: "responsavel",
-  },
-  {
-    key: "rgResponsavel",
-    label: "rgResponsavel",
-  },
-  {
-    key: "cpfResponsavel",
-    label: "cpfResponsavel",
-  },
-  {
-    key: "naturalidade",
-    label: "naturalidade",
-  },
-  {
-    key: "estado",
-    label: "estado",
-  },
-  {
-    key: "ultimaProcedencia",
-    label: "ultimaProcedencia",
-  },
-  {
-    key: "ra",
-    label: "ra",
-  },
-  {
-    key: "escola",
-    label: "escola",
-  },
-  {
-    key: "serieEscola",
-    label: "serieEscola",
-  },
-  {
-    key: "endereco",
-    label: "endereco",
-  },
-  {
-    key: "bairro",
-    label: "bairro",
-  },
-  {
-    key: "cep",
-    label: "cep",
-  },
-  {
-    key: "contatos",
-    label: "contatos",
-  },
-];
+import { MatriculasDto } from "@/dto/matriculasDto";
 
 interface Props {
   token: string;
 }
 
-export function ListaDeAlunos({ token }: Props) {
+const columns = [
+  {
+    key: "atendido",
+    label: "atendido",
+  },
+  {
+    key: "telefoneMae",
+    label: "telefoneMae",
+  },
+  {
+    key: "telefonePai",
+    label: "telefonePai",
+  },
+  {
+    key: "telefoneRecado",
+    label: "telefoneRecado",
+  },
+  {
+    key: "responsavelLegal",
+    label: "responsavelLegal",
+  },
+  {
+    key: "anoMatricula",
+    label: "anoMatricula",
+  },
+];
+
+export function ListaDeMatriculas({ token }: Props) {
   const [page, setPage] = useState<number>(1);
 
   const fetcher = (url: string) =>
@@ -121,11 +62,11 @@ export function ListaDeAlunos({ token }: Props) {
     isLoading,
   }: {
     data: {
-      alunos: AlunosDto[];
+      matriculas: MatriculasDto[];
       total: number;
     };
     isLoading: boolean;
-  } = useSWR(`${api.defaults.baseURL}/alunos?page=${page}`, fetcher, {
+  } = useSWR(`${api.defaults.baseURL}/matriculas?page=${page}`, fetcher, {
     keepPreviousData: true,
   });
 
@@ -136,11 +77,11 @@ export function ListaDeAlunos({ token }: Props) {
   }, [data?.total, rowsPerPage]);
 
   const loadingState =
-    isLoading || data?.alunos?.length === 0 ? "loading" : "idle";
+    isLoading || data?.matriculas?.length === 0 ? "loading" : "idle";
 
   return (
     <Table
-      aria-label="Lista dos alunos cadastrados"
+      aria-label="Lista matriculas dos alunos cadastrados"
       bottomContent={
         pages > 0 ? (
           <div className="flex w-full justify-center">
@@ -162,7 +103,7 @@ export function ListaDeAlunos({ token }: Props) {
       </TableHeader>
       <TableBody
         emptyContent={<span>Não há nenhum aluno cadastrado</span>}
-        items={data?.alunos ?? []}
+        items={data?.matriculas ?? []}
         loadingContent={<Spinner />}
         loadingState={loadingState}
       >

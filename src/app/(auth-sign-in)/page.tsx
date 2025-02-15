@@ -34,8 +34,6 @@ export default function AuthSignIn() {
       return toast.error("Credenciais invalidas");
     }
 
-    toast.success("Usuário logado");
-
     refresh();
   }
 

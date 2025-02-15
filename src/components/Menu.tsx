@@ -10,6 +10,7 @@ import {
 } from "@heroui/drawer";
 import { Button } from "@heroui/button";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 interface Props {
   isOpen: boolean;
@@ -18,6 +19,14 @@ interface Props {
 
 export function Menu({ isOpen, onOpenChange }: Props) {
   const { push } = useRouter();
+
+  function handleSignOut(onClose: () => void) {
+    onClose();
+    signOut({
+      redirect: true,
+      callbackUrl: "/",
+    });
+  }
 
   return (
     <Drawer
@@ -57,8 +66,12 @@ export function Menu({ isOpen, onOpenChange }: Props) {
               </Button>
             </DrawerBody>
             <DrawerFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
-                Fechar
+              <Button
+                color="danger"
+                variant="light"
+                onPress={() => handleSignOut(onClose)}
+              >
+                Sair
               </Button>
             </DrawerFooter>
           </>
