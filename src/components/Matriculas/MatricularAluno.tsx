@@ -49,9 +49,17 @@ export default function MatricularAluno({
     resolver: zodResolver(matriculasSchema),
   });
 
+  const [files, setFiles] = useState<FileList | null>(null);
+  const [filesId, setFilesId] = useState<string[]>([]);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [alunos, setAlunos] = useState<Array<{ nome: string; id: string }>>([]);
   const [loadingAlunos, setLoadingAlunos] = useState<boolean>(false);
+  const [loadingAnexos, setLoadingAnexos] = useState<boolean>(false);
+
+  function cleanFileId() {
+    setFilesId([]);
+  }
 
   async function handleMatricularAluno(data: MatriculaType) {
     try {
@@ -68,6 +76,7 @@ export default function MatricularAluno({
             data.telefoneRecado?.length === 0 ? null : data.telefoneRecado,
           responsavelLegal: data.responsavelLegal,
           anoMatricula: +data.anoMatricula,
+          documentos: filesId,
         },
         {
           headers: {
@@ -108,9 +117,56 @@ export default function MatricularAluno({
     }
 
     if (isOpen) {
+      cleanFileId();
       getAlunosSelect();
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    async function handleAnexarDocumentos() {
+      try {
+        setLoadingAnexos(true);
+
+        let initFile = 0;
+        const filesCount = files?.length ?? 0;
+
+        while (initFile < filesCount) {
+          if (files !== null) {
+            const formData = new FormData();
+
+            formData.append("file", files[initFile]);
+
+            const responseDocumento = await api.post<{ idDocumento: string }>(
+              "/upload/documento",
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            setFilesId((state) => [
+              ...state,
+              responseDocumento.data.idDocumento,
+            ]);
+          }
+
+          initFile++;
+        }
+        toast.success("Documentos anexados com sucesso!");
+      } catch (error) {
+        toast.error("Ocorreu um erro ao anexar arquivos");
+      } finally {
+        setLoadingAnexos(false);
+      }
+    }
+
+    if (files !== null) {
+      handleAnexarDocumentos();
+    }
+  }, [files]);
 
   return (
     <Modal
@@ -124,7 +180,7 @@ export default function MatricularAluno({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              Cadastrar aluno
+              Matricular Aluno
             </ModalHeader>
             <ModalBody>
               <form
@@ -184,6 +240,19 @@ export default function MatricularAluno({
                         )}
                       </Autocomplete>
                     )}
+                  />
+                )}
+
+                {loadingAnexos === true ? (
+                  <Spinner />
+                ) : (
+                  <Input
+                    onChange={(value) => {
+                      setFiles(value.target.files);
+                    }}
+                    label="Anexar documentos"
+                    type="file"
+                    multiple
                   />
                 )}
 

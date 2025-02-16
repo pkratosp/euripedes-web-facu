@@ -1,6 +1,6 @@
 "use client";
 
-import { UserPlus, Users } from "@phosphor-icons/react";
+import { ClipboardText, UserPlus, Users } from "@phosphor-icons/react";
 import {
   Drawer,
   DrawerBody,
@@ -63,6 +63,17 @@ export function Menu({ isOpen, onOpenChange }: Props) {
               >
                 <UserPlus size={32} />
                 <span className="block">matriculas</span>
+              </Button>
+
+              <Button
+                onPress={() => {
+                  push("/formularios");
+                  onClose();
+                }}
+                className="flex space-x-2 items-center bg-transparent justify-start"
+              >
+                <ClipboardText size={32} />
+                <span className="block">formularios</span>
               </Button>
             </DrawerBody>
             <DrawerFooter>

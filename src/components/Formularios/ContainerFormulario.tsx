@@ -1,21 +1,21 @@
 "use client";
 
+import { useDisclosure } from "@heroui/modal";
+import { CadastrarPergunta } from "./CadastrarPergunta";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
-import { useDisclosure } from "@heroui/modal";
-import { ListaDeMatriculas } from "./ListaDeMatriculas";
-import MatricularAluno from "./MatricularAluno";
+import { ListaDePerguntas } from "./ListaDePerguntas";
 
 interface Props {
   token: string;
 }
 
-export default function ContainerMatricula({ token }: Props) {
+export function ContainerFormulario({ token }: Props) {
   const { onOpen, isOpen, onOpenChange, onClose } = useDisclosure();
 
   return (
     <>
-      <MatricularAluno
+      <CadastrarPergunta
         isOpen={isOpen}
         onClose={onClose}
         onOpenChange={onOpenChange}
@@ -24,12 +24,12 @@ export default function ContainerMatricula({ token }: Props) {
 
       <div className="flex items-center justify-end">
         <Button onPress={onOpen} className="bg-blue-500 text-white">
-          Matricular aluno
+          Cadastrar pergunta
         </Button>
         <Input className="w-1/3 p-4" placeholder="Pesquisar..." />
       </div>
 
-      <ListaDeMatriculas token={token} />
+      <ListaDePerguntas token={token} />
     </>
   );
 }
