@@ -1,7 +1,11 @@
 "use client";
-import { AlunosDto } from "@/dto/alunosDto";
+import {
+  AlunoDocumentosDto,
+  AlunosDocumentosDto,
+  AlunosDto,
+} from "@/dto/alunosDto";
 import { api } from "@/lib/axios";
-import { Pagination } from "@heroui/react";
+import { Button, Pagination, useDisclosure } from "@heroui/react";
 import {
   Table,
   TableHeader,
@@ -12,9 +16,12 @@ import {
   getKeyValue,
 } from "@heroui/table";
 import { Spinner } from "@heroui/spinner";
-import { useMemo, useState } from "react";
+import React, { Fragment, useCallback, useMemo, useState } from "react";
 import useSWR from "swr";
 import { toast } from "sonner";
+import { EditarAluno } from "./EditarAluno";
+import { DocumentosAluno } from "./DocumentosAluno";
+import { Ocorrencia } from "./Ocorrencia";
 
 const columns = [
   {
@@ -101,6 +108,10 @@ const columns = [
     key: "contatos",
     label: "contatos",
   },
+  {
+    key: "ações",
+    label: "ações",
+  },
 ];
 
 interface Props {
@@ -108,6 +119,12 @@ interface Props {
 }
 
 export function ListaDeAlunos({ token }: Props) {
+  const { onOpen, isOpen, onOpenChange, onClose } = useDisclosure();
+  const documentosModal = useDisclosure();
+  const ocorrenciaModal = useDisclosure();
+
+  const [alunoDetalhes, setAlunoDetalhes] = useState<AlunosDto | null>(null);
+
   const [page, setPage] = useState<number>(1);
 
   const fetcher = (url: string) =>
@@ -121,7 +138,7 @@ export function ListaDeAlunos({ token }: Props) {
     isLoading,
   }: {
     data: {
-      alunos: AlunosDto[];
+      alunos: AlunosDocumentosDto[];
       total: number;
     };
     isLoading: boolean;
@@ -138,42 +155,156 @@ export function ListaDeAlunos({ token }: Props) {
   const loadingState =
     isLoading || data?.alunos?.length === 0 ? "loading" : "idle";
 
-  return (
-    <Table
-      aria-label="Lista dos alunos cadastrados"
-      bottomContent={
-        pages > 0 ? (
-          <div className="flex w-full justify-center">
-            <Pagination
-              isCompact
-              showControls
-              showShadow
-              color="primary"
-              page={page}
-              total={pages}
-              onChange={(page) => setPage(page)}
-            />
-          </div>
-        ) : null
+  const renderCell = useCallback(
+    (
+      aluno: AlunosDto,
+      columKey: React.Key,
+      documentos: AlunoDocumentosDto[] | undefined
+    ) => {
+      const columnCell = aluno[columKey as keyof AlunosDto];
+
+      switch (columKey) {
+        case "nome":
+          return <p>{columnCell}</p>;
+        case "sexo":
+          return <p>{columnCell}</p>;
+        case "nis":
+          return <p>{columnCell}</p>;
+        case "dataNascimento":
+          return <p>{columnCell}</p>;
+        case "rg":
+          return <p>{columnCell}</p>;
+        case "cpf":
+          return <p>{columnCell}</p>;
+        case "filiacaoMae":
+          return <p>{columnCell}</p>;
+        case "pai":
+          return <p>{columnCell}</p>;
+        case "responsavel":
+          return <p>{columnCell}</p>;
+        case "rgResponsavel":
+          return <p>{columnCell}</p>;
+        case "cpfResponsavel":
+          return <p>{columnCell}</p>;
+        case "naturalidade":
+          return <p>{columnCell}</p>;
+        case "estado":
+          return <p>{columnCell}</p>;
+        case "ultimaProcedencia":
+          return <p>{columnCell}</p>;
+        case "ra":
+          return <p>{columnCell}</p>;
+        case "escola":
+          return <p>{columnCell}</p>;
+        case "serieEscola":
+          return <p>{columnCell}</p>;
+        case "endereco":
+          return <p>{columnCell}</p>;
+        case "bairro":
+          return <p>{columnCell}</p>;
+        case "cep":
+          return <p>{columnCell}</p>;
+        case "contatos":
+          return <p>{columnCell}</p>;
+
+        case "ações":
+          return (
+            <div className="flex space-x-2">
+              <Button
+                onPress={() => {
+                  setAlunoDetalhes(aluno);
+                  onOpen();
+                }}
+              >
+                Editar dados
+              </Button>
+              <Button
+                onPress={() => {
+                  setAlunoDetalhes(aluno);
+                  documentosModal.onOpen();
+                }}
+              >
+                documentos
+              </Button>
+              <Button
+                onPress={() => {
+                  setAlunoDetalhes(aluno);
+                  ocorrenciaModal.onOpen();
+                }}
+              >
+                Ocorrencia
+              </Button>
+            </div>
+          );
       }
-    >
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-      </TableHeader>
-      <TableBody
-        emptyContent={<span>Não há nenhum aluno cadastrado</span>}
-        items={data?.alunos ?? []}
-        loadingContent={<Spinner />}
-        loadingState={loadingState}
+    },
+    []
+  );
+
+  return (
+    <Fragment>
+      <EditarAluno
+        dadosAluno={alunoDetalhes}
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpenChange={onOpenChange}
+        token={token}
+      />
+
+      <DocumentosAluno
+        dadosAluno={alunoDetalhes}
+        isOpen={documentosModal.isOpen}
+        onOpenChange={documentosModal.onOpenChange}
+      />
+
+      <Ocorrencia
+        isOpen={ocorrenciaModal.isOpen}
+        nomeAluno={alunoDetalhes?.nome ?? ""}
+        alunoId={alunoDetalhes?.id ?? ""}
+        onOpenChange={ocorrenciaModal.onOpenChange}
+        token={token}
+      />
+
+      <Table
+        aria-label="Lista dos alunos cadastrados"
+        bottomContent={
+          pages > 0 ? (
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                color="primary"
+                page={page}
+                total={pages}
+                onChange={(page) => setPage(page)}
+              />
+            </div>
+          ) : null
+        }
       >
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{getKeyValue(item, columnKey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+        <TableHeader columns={columns}>
+          {(column) => (
+            <TableColumn key={column.key}>{column.label}</TableColumn>
+          )}
+        </TableHeader>
+        <TableBody
+          emptyContent={<span>Não há nenhum aluno cadastrado</span>}
+          items={data?.alunos ?? []}
+          loadingContent={<Spinner />}
+          loadingState={loadingState}
+        >
+          {({ documentos, ...aluno }) => (
+            <TableRow key={aluno.id}>
+              {(columnKey) => (
+                <TableCell>
+                  {renderCell(aluno, columnKey, documentos)}
+                </TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+    </Fragment>
   );
 }

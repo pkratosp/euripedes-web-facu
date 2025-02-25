@@ -46,12 +46,14 @@ export default function AuthSignIn() {
             {...register("username")}
             label="username"
             placeholder="Digite o user name"
+            required
           />
           <Input
             {...register("password")}
             label="senha"
             type="password"
             placeholder="Digite sua senha"
+            required
           />
           <Button
             isLoading={isLoadingButtonSignIn}

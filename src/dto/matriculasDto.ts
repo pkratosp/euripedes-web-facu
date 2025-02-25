@@ -6,4 +6,8 @@ export interface MatriculasDto {
   telefoneRecado: string | null;
   responsavelLegal: string;
   anoMatricula: number;
+  aluno: {
+    id: string;
+    nome: string;
+  };
 }

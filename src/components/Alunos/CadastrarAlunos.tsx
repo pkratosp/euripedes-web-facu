@@ -2,6 +2,13 @@
 
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
+import { DateInput } from "@heroui/react";
+import {
+  parseDate,
+  getLocalTimeZone,
+  parseAbsoluteToLocal,
+} from "@internationalized/date";
+import { I18nProvider } from "@react-aria/i18n";
 import { Modal, ModalContent, ModalBody, ModalHeader } from "@heroui/modal";
 import { Select, SelectItem } from "@heroui/select";
 import { useForm, Controller } from "react-hook-form";
@@ -179,68 +186,71 @@ export function CadastrarAlunos({
                 className="space-y-4"
                 onSubmit={handleSubmit(handleCadastrarAlunos)}
               >
-                <Input
-                  {...register("nome", { required: true })}
-                  label="Nome do aluno"
+                <Input {...register("nome")} label="Nome do aluno" required />
+                <Input {...register("ra")} label="Ra" required />
+                <Input {...register("nis")} label="nis" required />
+                <Input {...register("cpf")} label="CPF" required />
+                <Input {...register("rg")} label="RG" required />
+
+                <Controller
+                  name="dataNascimento"
+                  control={control}
+                  render={({ field: { name, onBlur, onChange, ref } }) => (
+                    <I18nProvider locale="pt-br">
+                      <DateInput
+                        name={name}
+                        onBlur={onBlur}
+                        ref={ref}
+                        onChange={onChange}
+                        label="Data de nascimento"
+                        isRequired
+                      />
+                    </I18nProvider>
+                  )}
                 />
-                <Input {...register("ra", { required: true })} label="Ra" />
-                <Input {...register("nis", { required: true })} label="nis" />
-                <Input {...register("cpf", { required: true })} label="CPF" />
-                <Input {...register("rg", { required: true })} label="RG" />
+
                 <Input
-                  {...register("dataNascimento", { required: true })}
-                  label="data de nascimento"
-                />
-                <Input
-                  {...register("naturalidade", { required: true })}
+                  {...register("naturalidade")}
                   label="naturalidade"
+                  required
                 />
+                <Input {...register("estado")} label="estado" required />
+                <Input {...register("endereco")} label="endereço" required />
+                <Input {...register("bairro")} label="bairro" required />
+                <Input {...register("cep")} label="cep" required />
+                <Input {...register("escola")} label="escola" required />
                 <Input
-                  {...register("estado", { required: true })}
-                  label="estado"
-                />
-                <Input
-                  {...register("endereco", { required: true })}
-                  label="endereço"
-                />
-                <Input
-                  {...register("bairro", { required: true })}
-                  label="bairro"
-                />
-                <Input {...register("cep", { required: true })} label="cep" />
-                <Input
-                  {...register("escola", { required: true })}
-                  label="escola"
-                />
-                <Input
-                  {...register("serieEscola", { required: true })}
+                  {...register("serieEscola")}
                   label="série da escola"
+                  required
                 />
                 <Input
-                  {...register("ultimaProcedencia", { required: true })}
+                  {...register("ultimaProcedencia")}
                   label="Ultima procedencia"
+                  required
                 />
                 <Input
-                  {...register("responsavel", { required: true })}
+                  {...register("responsavel")}
                   label="Nome do responsavel"
+                  required
                 />
                 <Input
-                  {...register("rgResponsavel", { required: true })}
+                  {...register("rgResponsavel")}
                   label="Rg do responsavel"
+                  required
                 />
                 <Input
-                  {...register("cpfResponsavel", { required: true })}
+                  {...register("cpfResponsavel")}
                   label="CPF do responsavel"
+                  required
                 />
                 <Input
-                  {...register("filiacaoMae", { required: true })}
+                  {...register("filiacaoMae")}
                   label="Filiação mãe"
+                  required
                 />
-                <Input {...register("pai", { required: false })} label="Pai" />
-                <Input
-                  {...register("contatos", { required: true })}
-                  label="Contatos"
-                />
+                <Input {...register("pai")} label="Pai" />
+                <Input {...register("contatos")} label="Contatos" required />
 
                 <Controller
                   name="sexo"

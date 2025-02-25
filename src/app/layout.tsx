@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "@next/font/google";
+import { Inter } from "next/font/google";
 import "../styles/globals.css";
 import { Provider } from "./providers";
 import { Toaster } from "sonner";
 import NextAuthSessionProvider from "@/provider/sessionProvider";
+import "dayjs/locale/pt-br";
 
 const inter = Inter({
   subsets: ["latin"],

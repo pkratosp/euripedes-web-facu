@@ -1,6 +1,11 @@
 "use client";
 
-import { ClipboardText, UserPlus, Users } from "@phosphor-icons/react";
+import {
+  ClipboardText,
+  PencilSimpleLine,
+  UserPlus,
+  Users,
+} from "@phosphor-icons/react";
 import {
   Drawer,
   DrawerBody,
