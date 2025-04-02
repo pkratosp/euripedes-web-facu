@@ -407,7 +407,7 @@ export default function MatricularAluno({
                   loadingPerguntas === true ? (
                     <Spinner />
                   ) : (
-                    <div>
+                    <div className="space-y-4">
                       {perguntas.map((pergunta) => (
                         <Input
                           key={pergunta.id}

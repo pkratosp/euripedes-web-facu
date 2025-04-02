@@ -73,7 +73,7 @@ export function InformacoesAluno({
               {loadingPerguntas === true ? (
                 <Spinner />
               ) : (
-                <div>
+                <div className="space-y-4">
                   {perguntas.map((pergunta) => (
                     <Input
                       // {...register(pergunta.id)}

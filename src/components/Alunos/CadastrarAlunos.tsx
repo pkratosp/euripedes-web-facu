@@ -192,7 +192,12 @@ export function CadastrarAlunos({
                 <Input {...register("cpf")} label="CPF" required />
                 <Input {...register("rg")} label="RG" required />
 
-                <Controller
+                <Input
+                  {...register("dataNascimento")}
+                  label="Data de nascimento"
+                  required
+                />
+                {/* <Controller
                   name="dataNascimento"
                   control={control}
                   render={({ field: { name, onBlur, onChange, ref } }) => (
@@ -207,7 +212,7 @@ export function CadastrarAlunos({
                       />
                     </I18nProvider>
                   )}
-                />
+                /> */}
 
                 <Input
                   {...register("naturalidade")}
