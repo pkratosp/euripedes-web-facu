@@ -255,6 +255,7 @@ export function ListaDeAlunos({ token }: Props) {
         dadosAluno={alunoDetalhes}
         isOpen={documentosModal.isOpen}
         onOpenChange={documentosModal.onOpenChange}
+        token={token}
       />
 
       <Ocorrencia

@@ -1,4 +1,3 @@
-import { AlunosDocumentosDto } from "@/dto/alunosDto";
 import { DocumentosDto } from "@/dto/documentosDto";
 import { api } from "@/lib/axios";
 import { Modal, ModalBody, ModalContent, ModalHeader } from "@heroui/modal";
@@ -10,26 +9,25 @@ import { toast } from "sonner";
 interface Props {
   isOpen: boolean;
   onOpenChange: () => void;
-  dadosAluno: AlunosDocumentosDto | null;
   token: string;
+  matriculaId: string;
 }
 
-export function DocumentosAluno({
-  dadosAluno,
+export function DocumentosMatricula({
   isOpen,
   onOpenChange,
   token,
+  matriculaId,
 }: Props) {
   const [loadingDocumentos, setLoadingDocumentos] = useState<boolean>(false);
   const [documentos, setDocumentos] = useState<DocumentosDto[]>([]);
 
   useEffect(() => {
-    async function buscarTodosDocumentosAlunos() {
+    async function buscarTodosDocumentos() {
       try {
         setLoadingDocumentos(true);
-
         const response = await api.get(
-          `/alunos/${dadosAluno?.id}/todos/documentos`,
+          `/matriculas/${matriculaId}/todos/documentos`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -47,7 +45,7 @@ export function DocumentosAluno({
     }
 
     if (isOpen) {
-      buscarTodosDocumentosAlunos();
+      buscarTodosDocumentos();
     }
   }, [isOpen]);
 
@@ -62,7 +60,7 @@ export function DocumentosAluno({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              Documentos - {dadosAluno?.nome}
+              Documentos da matricula
             </ModalHeader>
             <ModalBody>
               {loadingDocumentos === true ? (
