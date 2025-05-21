@@ -8,7 +8,7 @@ import { DateInput, Spinner } from "@heroui/react";
 import { Select, SelectItem } from "@heroui/select";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { I18nProvider } from "@react-aria/i18n";
 import { CalendarDate, parseDate } from "@internationalized/date";
 import { toast } from "sonner";
@@ -79,6 +79,7 @@ export function EditarAluno({
   });
 
   const [files, setFiles] = useState<FileList | null>(null);
+  const [filesId, setFilesId] = useState<string[]>([]);
 
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingAnexos, setLoadingAnexos] = useState<boolean>(false);
@@ -87,11 +88,18 @@ export function EditarAluno({
     try {
       setLoading(true);
 
-      await api.put(`aluno/${dadosAluno?.id}`, data, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      await api.put(
+        `aluno/${dadosAluno?.id}`,
+        {
+          ...data,
+          documentos: filesId,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       toast.success("Aluno edita com sucesso");
     } catch (error) {
@@ -100,6 +108,52 @@ export function EditarAluno({
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    async function handleAnexarDocumentos() {
+      try {
+        setLoadingAnexos(true);
+
+        let initFile = 0;
+        const filesCount = files?.length ?? 0;
+
+        while (initFile < filesCount) {
+          if (files !== null) {
+            const formData = new FormData();
+
+            formData.append("file", files[initFile]);
+
+            const responseDocumento = await api.post<{ idDocumento: string }>(
+              "/upload/documento",
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+
+            setFilesId((state) => [
+              ...state,
+              responseDocumento.data.idDocumento,
+            ]);
+          }
+
+          initFile++;
+        }
+        toast.success("Documentos anexados com sucesso!");
+      } catch (error) {
+        toast.error("Ocorreu um erro ao anexar arquivos");
+      } finally {
+        setLoadingAnexos(false);
+      }
+    }
+
+    if (files !== null) {
+      handleAnexarDocumentos();
+    }
+  }, [files]);
 
   return (
     <Modal
