@@ -7,6 +7,7 @@ import { Input } from "@heroui/input";
 import { CadastrarAlunos } from "./CadastrarAlunos";
 import { ListaDeAlunos } from "./ListaDeAlunos";
 import { RegistrarOcorrencia } from "./RegistrarOcorrencia";
+import { useState } from "react";
 
 interface Props {
   token: string;
@@ -15,6 +16,8 @@ interface Props {
 export function ContainerAluno({ token }: Props) {
   const { onOpen, isOpen, onOpenChange, onClose } = useDisclosure();
   const ocorrenciaModal = useDisclosure();
+
+  const [search, setSearch] = useState<string>("");
 
   return (
     <>
@@ -41,10 +44,16 @@ export function ContainerAluno({ token }: Props) {
         >
           Registrar ocorrencia
         </Button>
-        <Input className="w-1/3" placeholder="Pesquisar..." />
+        <Input
+          onChange={(event) => {
+            setSearch(event.target.value);
+          }}
+          className="w-1/3"
+          placeholder="Pesquisar..."
+        />
       </div>
 
-      <ListaDeAlunos token={token} />
+      <ListaDeAlunos search={search} token={token} />
     </>
   );
 }

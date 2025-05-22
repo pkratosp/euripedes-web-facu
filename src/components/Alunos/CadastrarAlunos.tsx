@@ -110,6 +110,10 @@ export function CadastrarAlunos({
       onClose();
 
       toast.success("Aluno cadastrado com sucesso!");
+
+      setTimeout(() => {
+        window.document.location.reload();
+      }, 1500);
     } catch (error) {
       toast.error("Ocorreu um erro ao tentar cadastrar o aluno");
     } finally {
@@ -179,7 +183,7 @@ export function CadastrarAlunos({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              Cadastrar aluno
+              Cadastrar atendido
             </ModalHeader>
             <ModalBody>
               <form

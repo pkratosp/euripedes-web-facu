@@ -57,7 +57,7 @@ export function Menu({ isOpen, onOpenChange }: Props) {
                 className="flex space-x-2 items-center bg-transparent justify-start"
               >
                 <Users size={32} />
-                <span className="block">alunos</span>
+                <span className="block">atendidos</span>
               </Button>
               <Button
                 onPress={() => {

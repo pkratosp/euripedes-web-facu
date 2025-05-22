@@ -11,7 +11,7 @@ import {
   TableCell,
 } from "@heroui/table";
 import { Spinner } from "@heroui/spinner";
-import { Fragment, useCallback, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { toast } from "sonner";
 import { MatriculasDto } from "@/dto/matriculasDto";
@@ -20,8 +20,14 @@ import { EditarMatricula } from "./EditarMatricula";
 import { Desmatricular } from "./Desmatricular";
 import { Rematricular } from "./Rematricular";
 
+interface MatriculasType {
+  matriculas: MatriculasDto[];
+  total: number;
+}
+
 interface Props {
   token: string;
+  search: string;
 }
 
 const columns = [
@@ -59,7 +65,7 @@ const columns = [
   },
 ];
 
-export function ListaDeMatriculas({ token }: Props) {
+export function ListaDeMatriculas({ search, token }: Props) {
   const informacoesAluno = useDisclosure();
   const editarMatricula = useDisclosure();
   const desmatricular = useDisclosure();
@@ -70,6 +76,11 @@ export function ListaDeMatriculas({ token }: Props) {
     "aluno"
   > | null>(null);
   const [aluno, setAluno] = useState<{ nome: string; id: string } | null>(null);
+
+  const [matriculas, setMatriculas] = useState<MatriculasType>({
+    matriculas: [],
+    total: 0,
+  });
 
   const [page, setPage] = useState<number>(1);
 
@@ -83,23 +94,23 @@ export function ListaDeMatriculas({ token }: Props) {
     data,
     isLoading,
   }: {
-    data: {
-      matriculas: MatriculasDto[];
-      total: number;
-    };
+    data: MatriculasType;
     isLoading: boolean;
   } = useSWR(`${api.defaults.baseURL}/matriculas?page=${page}`, fetcher, {
     keepPreviousData: true,
+    onSuccess: (data: MatriculasType) => {
+      setMatriculas(data);
+    },
   });
 
   const rowsPerPage = 20;
 
   const pages = useMemo(() => {
-    return data?.total ? Math.ceil(data.total / rowsPerPage) : 0;
-  }, [data?.total, rowsPerPage]);
+    return matriculas?.total ? Math.ceil(matriculas.total / rowsPerPage) : 0;
+  }, [matriculas?.total, rowsPerPage]);
 
   const loadingState =
-    isLoading || data?.matriculas?.length === 0 ? "loading" : "idle";
+    isLoading || matriculas?.matriculas?.length === 0 ? "loading" : "idle";
 
   const renderCell = useCallback(
     (
@@ -184,6 +195,31 @@ export function ListaDeMatriculas({ token }: Props) {
     []
   );
 
+  async function buscarMatriculaNomeAluno(search: string) {
+    try {
+      const request = await api.get(`/matriculas/${search}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setMatriculas(request.data);
+    } catch (error) {
+      toast.error(`Ocorreu um erro ao consultar matricula do aluno ${search}`);
+    }
+  }
+
+  useEffect(() => {
+    const findSearch = setTimeout(() => {
+      if (search.trim() !== "") {
+        buscarMatriculaNomeAluno(search);
+      } else {
+        buscarMatriculaNomeAluno("vazio");
+      }
+    }, 1000);
+
+    return () => clearTimeout(findSearch);
+  }, [search]);
+
   return (
     <Fragment>
       <InformacoesAluno
@@ -243,7 +279,7 @@ export function ListaDeMatriculas({ token }: Props) {
         </TableHeader>
         <TableBody
           emptyContent={<span>Não há nenhum aluno cadastrado</span>}
-          items={data?.matriculas ?? []}
+          items={matriculas?.matriculas ?? []}
           loadingContent={<Spinner />}
           loadingState={loadingState}
         >

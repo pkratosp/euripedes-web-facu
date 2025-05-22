@@ -16,7 +16,13 @@ import {
   getKeyValue,
 } from "@heroui/table";
 import { Spinner } from "@heroui/spinner";
-import React, { Fragment, useCallback, useMemo, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import useSWR from "swr";
 import { toast } from "sonner";
 import { EditarAluno } from "./EditarAluno";
@@ -114,16 +120,27 @@ const columns = [
   },
 ];
 
+interface RequestAlunos {
+  alunos: AlunosDocumentosDto[];
+  total: number;
+}
+
 interface Props {
+  search: string;
   token: string;
 }
 
-export function ListaDeAlunos({ token }: Props) {
+export function ListaDeAlunos({ search, token }: Props) {
   const { onOpen, isOpen, onOpenChange, onClose } = useDisclosure();
   const documentosModal = useDisclosure();
   const ocorrenciaModal = useDisclosure();
 
   const [alunoDetalhes, setAlunoDetalhes] = useState<AlunosDto | null>(null);
+
+  const [alunos, setAlunos] = useState<RequestAlunos>({
+    alunos: [],
+    total: 0,
+  });
 
   const [page, setPage] = useState<number>(1);
 
@@ -137,23 +154,23 @@ export function ListaDeAlunos({ token }: Props) {
     data,
     isLoading,
   }: {
-    data: {
-      alunos: AlunosDocumentosDto[];
-      total: number;
-    };
+    data: RequestAlunos;
     isLoading: boolean;
   } = useSWR(`${api.defaults.baseURL}/alunos?page=${page}`, fetcher, {
     keepPreviousData: true,
+    onSuccess: (data: RequestAlunos) => {
+      setAlunos(data);
+    },
   });
 
   const rowsPerPage = 20;
 
   const pages = useMemo(() => {
-    return data?.total ? Math.ceil(data.total / rowsPerPage) : 0;
-  }, [data?.total, rowsPerPage]);
+    return alunos?.total ? Math.ceil(alunos.total / rowsPerPage) : 0;
+  }, [alunos?.total, rowsPerPage]);
 
   const loadingState =
-    isLoading || data?.alunos?.length === 0 ? "loading" : "idle";
+    isLoading || alunos?.alunos?.length === 0 ? "loading" : "idle";
 
   const renderCell = useCallback(
     (
@@ -241,6 +258,31 @@ export function ListaDeAlunos({ token }: Props) {
     []
   );
 
+  async function buscarAlunoNome(search: string) {
+    try {
+      const request = await api.get(`/alunos/${search}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setAlunos(request.data);
+    } catch (error) {
+      toast.error(`Ocorreu um erro ao consultar aluno ${search}`);
+    }
+  }
+
+  useEffect(() => {
+    const findSearch = setTimeout(() => {
+      if (search.trim() !== "") {
+        buscarAlunoNome(search);
+      } else {
+        buscarAlunoNome("vazio");
+      }
+    }, 1000);
+
+    return () => clearTimeout(findSearch);
+  }, [search]);
+
   return (
     <Fragment>
       <EditarAluno
@@ -291,7 +333,7 @@ export function ListaDeAlunos({ token }: Props) {
         </TableHeader>
         <TableBody
           emptyContent={<span>Não há nenhum aluno cadastrado</span>}
-          items={data?.alunos ?? []}
+          items={alunos?.alunos ?? []}
           loadingContent={<Spinner />}
           loadingState={loadingState}
         >

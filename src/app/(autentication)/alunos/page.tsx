@@ -7,7 +7,7 @@ export default async function Alunos() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold">Alunos</h2>
+      <h2 className="text-2xl font-bold">Alunos (Atendidos)</h2>
 
       <ContainerAluno token={session?.access_token ?? ""} />
     </div>

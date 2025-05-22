@@ -48,6 +48,9 @@ export function CadastrarPergunta({
       });
 
       toast.success("Pergunta cadastrada com sucesso!");
+      setTimeout(() => {
+        window.document.location.reload();
+      }, 1500);
     } catch (error) {
       toast.error("Ocorreu um erro ao criar pergunta");
     } finally {

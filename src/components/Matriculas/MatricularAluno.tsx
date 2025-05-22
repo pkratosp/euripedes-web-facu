@@ -143,6 +143,9 @@ export default function MatricularAluno({
       setRespostas({});
       toast.success("Respostas registradas com sucesso");
       onClose();
+      setTimeout(() => {
+        window.document.location.reload();
+      }, 1500);
     } catch (error) {
       toast.error("Ocorreu um erro inesperado ao responder perguntas");
     } finally {
@@ -275,7 +278,7 @@ export default function MatricularAluno({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              Matricular Aluno
+              Matricular Atendido
             </ModalHeader>
             <ModalBody>
               <div className="flex flex-1 space-x-5 justify-center">
