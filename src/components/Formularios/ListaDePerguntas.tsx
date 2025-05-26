@@ -45,7 +45,7 @@ export function ListaDePerguntas({ token }: Props) {
   }: {
     data: any;
     isLoading: boolean;
-  } = useSWR(`${api.defaults.baseURL}/perguntas?page=${page}`, fetcher, {
+  } = useSWR(`/perguntas?page=${page}`, fetcher, {
     keepPreviousData: true,
   });
 

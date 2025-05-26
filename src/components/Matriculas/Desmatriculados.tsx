@@ -1,24 +1,30 @@
-"use client";
-
-import { api } from "@/lib/axios";
-import { Button, Pagination, useDisclosure } from "@heroui/react";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableColumn,
-  TableRow,
-  TableCell,
-} from "@heroui/table";
-import { Spinner } from "@heroui/spinner";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
-import useSWR from "swr";
-import { toast } from "sonner";
 import { MatriculasDto } from "@/dto/matriculasDto";
+import { api } from "@/lib/axios";
+import { Button } from "@heroui/button";
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalHeader,
+  useDisclosure,
+} from "@heroui/modal";
+import clsx from "clsx";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { toast } from "sonner";
+import useSWR from "swr";
 import { InformacoesAluno } from "./InformacoesAluno";
 import { EditarMatricula } from "./EditarMatricula";
-import { Desmatricular } from "./Desmatricular";
 import { Rematricular } from "./Rematricular";
+import { Desmatricular } from "./Desmatricular";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from "@heroui/table";
+import { Input, Pagination, Spinner } from "@heroui/react";
 
 interface MatriculasType {
   matriculas: MatriculasDto[];
@@ -27,7 +33,9 @@ interface MatriculasType {
 
 interface Props {
   token: string;
-  search: string;
+  isOpen: boolean;
+  onOpenChange: () => void;
+  onClose: () => void;
 }
 
 const columns = [
@@ -65,10 +73,14 @@ const columns = [
   },
 ];
 
-export function ListaDeMatriculas({ search, token }: Props) {
+export function Desmatriculados({
+  isOpen,
+  onClose,
+  onOpenChange,
+  token,
+}: Props) {
   const informacoesAluno = useDisclosure();
   const editarMatricula = useDisclosure();
-  const desmatricular = useDisclosure();
   const rematricular = useDisclosure();
 
   const [matricula, setMatricula] = useState<Omit<
@@ -82,6 +94,8 @@ export function ListaDeMatriculas({ search, token }: Props) {
     total: 0,
   });
 
+  const [search, setSearch] = useState<string>("");
+
   const [page, setPage] = useState<number>(1);
 
   const fetcher = (url: string) =>
@@ -91,12 +105,11 @@ export function ListaDeMatriculas({ search, token }: Props) {
       .catch(() => toast.error("Ocorreu um erro ao listar dados"));
 
   const {
-    data,
     isLoading,
   }: {
     data: MatriculasType;
     isLoading: boolean;
-  } = useSWR(`/matriculas?page=${page}`, fetcher, {
+  } = useSWR(`/desmatriculados?page=${page}`, fetcher, {
     keepPreviousData: true,
     onSuccess: (data: MatriculasType) => {
       setMatriculas(data);
@@ -177,17 +190,6 @@ export function ListaDeMatriculas({ search, token }: Props) {
               >
                 Rematricular
               </Button>
-
-              <Button
-                className="w-1/4"
-                onPress={() => {
-                  setMatricula(matricula);
-                  setAluno(aluno);
-                  desmatricular.onOpen();
-                }}
-              >
-                Desmatricular
-              </Button>
             </div>
           );
       }
@@ -197,7 +199,7 @@ export function ListaDeMatriculas({ search, token }: Props) {
 
   async function buscarMatriculaNomeAluno(search: string) {
     try {
-      const request = await api.get(`/matriculas/${search}`, {
+      const request = await api.get(`/desmatriculados/${search}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -221,79 +223,98 @@ export function ListaDeMatriculas({ search, token }: Props) {
   }, [search]);
 
   return (
-    <Fragment>
-      <InformacoesAluno
-        isOpen={informacoesAluno.isOpen}
-        onOpenChange={informacoesAluno.onOpenChange}
-        token={token}
-        matriculaId={matricula?.id ?? ""}
-        nomeAluno={aluno?.nome ?? "Aluno não definido"}
-      />
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      scrollBehavior={"inside"}
+      size="full"
+      backdrop="blur"
+    >
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-col gap-1">
+              Desmatriculados
+            </ModalHeader>
+            <ModalBody>
+              <div className="flex items-center justify-end">
+                <Input
+                  onChange={(event) => {
+                    setSearch(event.target.value);
+                  }}
+                  className="w-1/3 p-4"
+                  placeholder="Pesquisar..."
+                />
+              </div>
 
-      <EditarMatricula
-        isOpen={editarMatricula.isOpen}
-        onOpenChange={editarMatricula.onOpenChange}
-        token={token}
-        aluno={aluno}
-        matricula={matricula}
-      />
-
-      <Rematricular
-        isOpen={rematricular.isOpen}
-        onOpenChange={rematricular.onOpenChange}
-        token={token}
-        aluno={aluno}
-        matricula={matricula}
-      />
-
-      <Desmatricular
-        isOpen={desmatricular.isOpen}
-        onOpenChange={desmatricular.onOpenChange}
-        token={token}
-        nomeAluno={aluno?.nome ?? "Aluno não definido"}
-        matriculaId={matricula?.id ?? ""}
-      />
-
-      <Table
-        aria-label="Lista matriculas dos alunos cadastrados"
-        bottomContent={
-          pages > 0 ? (
-            <div className="flex w-full justify-center">
-              <Pagination
-                isCompact
-                showControls
-                showShadow
-                color="primary"
-                page={page}
-                total={pages}
-                onChange={(page) => setPage(page)}
+              <InformacoesAluno
+                isOpen={informacoesAluno.isOpen}
+                onOpenChange={informacoesAluno.onOpenChange}
+                token={token}
+                matriculaId={matricula?.id ?? ""}
+                nomeAluno={aluno?.nome ?? "Aluno não definido"}
               />
-            </div>
-          ) : null
-        }
-      >
-        <TableHeader columns={columns}>
-          {(column) => (
-            <TableColumn key={column.key}>{column.label}</TableColumn>
-          )}
-        </TableHeader>
-        <TableBody
-          emptyContent={<span>Não há nenhum aluno cadastrado</span>}
-          items={matriculas?.matriculas ?? []}
-          loadingContent={<Spinner />}
-          loadingState={loadingState}
-        >
-          {(matricula) => (
-            <TableRow key={matricula.id}>
-              {(columnKey) => (
-                <TableCell>
-                  {renderCell(matricula, columnKey, matricula.aluno)}
-                </TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
-    </Fragment>
+
+              <EditarMatricula
+                isOpen={editarMatricula.isOpen}
+                onOpenChange={editarMatricula.onOpenChange}
+                token={token}
+                aluno={aluno}
+                matricula={matricula}
+              />
+
+              <Rematricular
+                isOpen={rematricular.isOpen}
+                onOpenChange={rematricular.onOpenChange}
+                token={token}
+                aluno={aluno}
+                matricula={matricula}
+              />
+
+              <Table
+                aria-label="Lista matriculas dos alunos cadastrados"
+                bottomContent={
+                  pages > 0 ? (
+                    <div className="flex w-full justify-center">
+                      <Pagination
+                        isCompact
+                        showControls
+                        showShadow
+                        color="primary"
+                        page={page}
+                        total={pages}
+                        onChange={(page) => setPage(page)}
+                      />
+                    </div>
+                  ) : null
+                }
+              >
+                <TableHeader columns={columns}>
+                  {(column) => (
+                    <TableColumn key={column.key}>{column.label}</TableColumn>
+                  )}
+                </TableHeader>
+                <TableBody
+                  emptyContent={<span>Não há nenhum aluno cadastrado</span>}
+                  items={matriculas?.matriculas ?? []}
+                  loadingContent={<Spinner />}
+                  loadingState={loadingState}
+                >
+                  {(matricula) => (
+                    <TableRow key={matricula.id}>
+                      {(columnKey) => (
+                        <TableCell>
+                          {renderCell(matricula, columnKey, matricula.aluno)}
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </ModalBody>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
   );
 }

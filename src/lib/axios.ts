@@ -22,6 +22,7 @@ api.registerIntercepTokenMenager = (singOut) => {
       return response;
     },
     async (requestError) => {
+      console.log(requestError.response, " --- ERRROR");
       if (requestError.response?.status === 401) {
         singOut();
         return;

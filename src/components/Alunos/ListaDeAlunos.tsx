@@ -156,7 +156,7 @@ export function ListaDeAlunos({ search, token }: Props) {
   }: {
     data: RequestAlunos;
     isLoading: boolean;
-  } = useSWR(`${api.defaults.baseURL}/alunos?page=${page}`, fetcher, {
+  } = useSWR(`/alunos?page=${page}`, fetcher, {
     keepPreviousData: true,
     onSuccess: (data: RequestAlunos) => {
       setAlunos(data);
