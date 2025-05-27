@@ -81,6 +81,9 @@ export function Ocorrencia({
                       Data da ocorrencia{" "}
                       {dayjs(ocorrencia.dataOcorrencia).format("DD/MM/YYYY")}
                     </h2>
+                    <span className="text-sm">
+                      Usuário que registrou: {ocorrencia.User.nome}
+                    </span>
                     <Input
                       label="Titulo"
                       value={ocorrencia?.titulo}

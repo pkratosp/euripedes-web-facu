@@ -4,4 +4,8 @@ export interface OcorrenciaDto {
   descricao: string;
   alunoId: string;
   dataOcorrencia: string;
+  User: {
+    id: string;
+    nome: string;
+  };
 }
