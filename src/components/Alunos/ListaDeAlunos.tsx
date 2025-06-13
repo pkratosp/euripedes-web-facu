@@ -32,91 +32,91 @@ import { Ocorrencia } from "./Ocorrencia";
 const columns = [
   {
     key: "nome",
-    label: "nome",
+    label: "Nome",
   },
   {
     key: "sexo",
-    label: "sexo",
+    label: "Sexo",
   },
   {
     key: "nis",
-    label: "nis",
+    label: "NIS",
   },
   {
     key: "dataNascimento",
-    label: "dataNascimento",
+    label: "Data de nascimento",
   },
   {
     key: "rg",
-    label: "rg",
+    label: "RG",
   },
   {
     key: "cpf",
-    label: "cpf",
+    label: "CPF",
   },
   {
     key: "filiacaoMae",
-    label: "filiacaoMae",
+    label: "Ficiação mãe",
   },
   {
     key: "pai",
-    label: "pai",
+    label: "Pai",
   },
   {
     key: "responsavel",
-    label: "responsavel",
+    label: "Responsável",
   },
   {
     key: "rgResponsavel",
-    label: "rgResponsavel",
+    label: "Rg Responsável",
   },
   {
     key: "cpfResponsavel",
-    label: "cpfResponsavel",
+    label: "CPF Responsável",
   },
   {
     key: "naturalidade",
-    label: "naturalidade",
+    label: "Naturalidade",
   },
   {
     key: "estado",
-    label: "estado",
+    label: "Estado",
   },
   {
     key: "ultimaProcedencia",
-    label: "ultimaProcedencia",
+    label: "Ultima Procedencia",
   },
   {
     key: "ra",
-    label: "ra",
+    label: "RA",
   },
   {
     key: "escola",
-    label: "escola",
+    label: "Escola",
   },
   {
     key: "serieEscola",
-    label: "serieEscola",
+    label: "Série Escola",
   },
   {
     key: "endereco",
-    label: "endereco",
+    label: "Endereço",
   },
   {
     key: "bairro",
-    label: "bairro",
+    label: "Bairro",
   },
   {
     key: "cep",
-    label: "cep",
+    label: "CEP",
   },
   {
     key: "contatos",
-    label: "contatos",
+    label: "Contatos",
   },
   {
     key: "ações",
-    label: "ações",
+    label: "Ações",
   },
 ];
 
@@ -241,7 +241,7 @@ export function ListaDeAlunos({ search, token }: Props) {
                   documentosModal.onOpen();
                 }}
               >
-                documentos
+                Documentos
               </Button>
               <Button
                 onPress={() => {
@@ -249,7 +249,7 @@ export function ListaDeAlunos({ search, token }: Props) {
                   ocorrenciaModal.onOpen();
                 }}
               >
-                Ocorrencia
+                Ocorrências
               </Button>
             </div>
           );
@@ -332,7 +332,7 @@ export function ListaDeAlunos({ search, token }: Props) {
           )}
         </TableHeader>
         <TableBody
-          emptyContent={<span>Não há nenhum aluno cadastrado</span>}
+          emptyContent={<span>Não há nenhum atendido cadastrado</span>}
           items={alunos?.alunos ?? []}
           loadingContent={<Spinner />}
           loadingState={loadingState}

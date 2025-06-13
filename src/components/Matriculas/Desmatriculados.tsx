@@ -233,9 +233,7 @@ export function Desmatriculados({
       <ModalContent>
         {(onClose) => (
           <>
-            <ModalHeader className="flex flex-col gap-1">
-              Desmatriculados
-            </ModalHeader>
+            <ModalHeader className="flex flex-col gap-1">Removidos</ModalHeader>
             <ModalBody>
               <div className="flex items-center justify-end">
                 <Input

@@ -18,11 +18,11 @@ import { toast } from "sonner";
 const columns = [
   {
     key: "titulo",
-    label: "titulo",
+    label: "Título",
   },
   {
     key: "descricao",
-    label: "descricao",
+    label: "Descricao",
   },
 ];
 

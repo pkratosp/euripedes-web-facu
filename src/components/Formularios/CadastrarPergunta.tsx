@@ -77,7 +77,7 @@ export function CadastrarPergunta({
                 className="space-y-4"
                 onSubmit={handleSubmit(handleCadastrarPergunta)}
               >
-                <Input {...register("titulo")} label="Titulo" />
+                <Input {...register("titulo")} label="Título" />
                 <Input {...register("descricao")} label="Descrição" />
 
                 <Button

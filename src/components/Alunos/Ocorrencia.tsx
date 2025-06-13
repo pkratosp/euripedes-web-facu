@@ -68,7 +68,7 @@ export function Ocorrencia({
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              Ocorrencias de {nomeAluno}
+              Ocorrêncis de {nomeAluno}
             </ModalHeader>
 
             <ModalBody>
@@ -78,7 +78,7 @@ export function Ocorrencia({
                 ocorrencias.map((ocorrencia) => (
                   <div key={ocorrencia.id} className="space-y-4">
                     <h2>
-                      Data da ocorrencia{" "}
+                      Data da ocorrência{" "}
                       {dayjs(ocorrencia.dataOcorrencia).format("DD/MM/YYYY")}
                     </h2>
                     <span className="text-sm">
@@ -99,7 +99,7 @@ export function Ocorrencia({
                 ))
               ) : (
                 <span className="text-center text-2xl text-black">
-                  Não a ocorrencias do aluno {nomeAluno}
+                  Não há ocorrências do atendido {nomeAluno}
                 </span>
               )}
             </ModalBody>

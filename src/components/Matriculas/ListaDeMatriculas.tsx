@@ -37,31 +37,31 @@ const columns = [
   },
   {
     key: "atendido",
-    label: "atendido",
+    label: "Atendido",
   },
   {
     key: "telefoneMae",
-    label: "telefone da Mãe",
+    label: "Telefone da Mãe",
   },
   {
     key: "telefonePai",
-    label: "telefone do pai",
+    label: "Telefone do pai",
   },
   {
     key: "telefoneRecado",
-    label: "telefone recado",
+    label: "Telefone recado",
   },
   {
     key: "responsavelLegal",
-    label: "resposavel legal",
+    label: "Resposável legal",
   },
   {
     key: "anoMatricula",
-    label: "ano matricula",
+    label: "Ano matrícula",
   },
   {
     key: "ações",
-    label: "ações",
+    label: "Ações",
   },
 ];
 
@@ -186,7 +186,7 @@ export function ListaDeMatriculas({ search, token }: Props) {
                   desmatricular.onOpen();
                 }}
               >
-                Desmatricular
+                Remover atendido
               </Button>
             </div>
           );

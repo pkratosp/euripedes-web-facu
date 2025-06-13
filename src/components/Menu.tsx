@@ -15,7 +15,7 @@ import {
 } from "@heroui/drawer";
 import { Button } from "@heroui/button";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 interface Props {
   isOpen: boolean;
@@ -24,6 +24,7 @@ interface Props {
 
 export function Menu({ isOpen, onOpenChange }: Props) {
   const { push } = useRouter();
+  const { data } = useSession();
 
   function handleSignOut(onClose: () => void) {
     onClose();
@@ -45,8 +46,8 @@ export function Menu({ isOpen, onOpenChange }: Props) {
         {(onClose) => (
           <>
             <DrawerHeader className="flex flex-col gap-1">
-              <h2 className="text-2xl font-bold">Jhon doe</h2>
-              <span className="font-normal text-xl">username</span>
+              <h2 className="text-2xl font-bold">{data?.nome}</h2>
+              <span className="font-normal text-xl">{data?.username}</span>
             </DrawerHeader>
             <DrawerBody>
               <Button
@@ -57,7 +58,7 @@ export function Menu({ isOpen, onOpenChange }: Props) {
                 className="flex space-x-2 items-center bg-transparent justify-start"
               >
                 <Users size={32} />
-                <span className="block">atendidos</span>
+                <span className="block">Atendidos</span>
               </Button>
               <Button
                 onPress={() => {
@@ -67,7 +68,7 @@ export function Menu({ isOpen, onOpenChange }: Props) {
                 className="flex space-x-2 items-center bg-transparent justify-start"
               >
                 <UserPlus size={32} />
-                <span className="block">matriculas</span>
+                <span className="block">Matrículas</span>
               </Button>
 
               <Button
@@ -78,7 +79,7 @@ export function Menu({ isOpen, onOpenChange }: Props) {
                 className="flex space-x-2 items-center bg-transparent justify-start"
               >
                 <ClipboardText size={32} />
-                <span className="block">formularios</span>
+                <span className="block">Formulários</span>
               </Button>
             </DrawerBody>
             <DrawerFooter>

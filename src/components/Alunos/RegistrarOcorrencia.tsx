@@ -53,10 +53,10 @@ export function RegistrarOcorrencia({ isOpen, onOpenChange, token }: Props) {
         }
       );
 
-      toast.success("Ocorrencia registrada com sucesso!");
+      toast.success("Ocorrência registrada com sucesso!");
       reset();
     } catch (error) {
-      toast.error("Ocorreu um erro criar ocorrencia");
+      toast.error("Ocorreu um erro criar Ocorrência");
     } finally {
       setLoading(false);
     }
@@ -78,7 +78,7 @@ export function RegistrarOcorrencia({ isOpen, onOpenChange, token }: Props) {
 
         setAlunos(response.data.alunos);
       } catch (error) {
-        toast.error("Ocorreu um erro ao buscar alunos");
+        toast.error("Ocorreu um erro ao buscar atendidos");
       } finally {
         setLoadingAlunos(false);
       }
@@ -101,7 +101,7 @@ export function RegistrarOcorrencia({ isOpen, onOpenChange, token }: Props) {
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              Registrar ocorrencia
+              Registrar ocorrência
             </ModalHeader>
             <ModalBody>
               <form
@@ -126,10 +126,10 @@ export function RegistrarOcorrencia({ isOpen, onOpenChange, token }: Props) {
                         name={name}
                         className="w-full"
                         defaultItems={alunos}
-                        label="lista dos alunos"
-                        placeholder="Digite o nome do aluno"
+                        label="lista dos atendidos"
+                        placeholder="Digite o nome do atendido(aluno)"
                         listboxProps={{
-                          emptyContent: "Aluno não encontrado",
+                          emptyContent: "Atendido não encontrado",
                         }}
                         onBlur={onBlur}
                         onSelectionChange={onChange}

@@ -36,13 +36,13 @@ export function ContainerAluno({ token }: Props) {
 
       <div className="flex items-center justify-end space-x-4 pb-4">
         <Button onPress={onOpen} className="bg-blue-500 text-white">
-          Cadastrar Aluno
+          Cadastrar atendido
         </Button>
         <Button
           onPress={ocorrenciaModal.onOpen}
           className="bg-blue-500 text-white"
         >
-          Registrar ocorrencia
+          Registrar Ocorrência
         </Button>
         <Input
           onChange={(event) => {

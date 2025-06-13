@@ -37,7 +37,7 @@ export default function ContainerMatricula({ token }: Props) {
 
       <div className="flex items-center justify-end">
         <Button onPress={onOpen} className="bg-blue-500 text-white mr-2">
-          Matricular atendido
+          Matrícular atendido
         </Button>
         <Button
           onPress={desmatriculados.onOpen}

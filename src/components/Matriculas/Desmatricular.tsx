@@ -75,7 +75,7 @@ export function Desmatricular({
                   type="button"
                   color="primary"
                 >
-                  Desmatricular
+                  Remover atendido
                 </Button>
               </div>
             </ModalFooter>

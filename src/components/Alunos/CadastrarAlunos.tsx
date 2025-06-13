@@ -191,8 +191,8 @@ export function CadastrarAlunos({
                 onSubmit={handleSubmit(handleCadastrarAlunos)}
               >
                 <Input {...register("nome")} label="Nome do aluno" required />
-                <Input {...register("ra")} label="Ra" required />
-                <Input {...register("nis")} label="nis" required />
+                <Input {...register("ra")} label="RA" required />
+                <Input {...register("nis")} label="NIS" required />
                 <Input {...register("cpf")} label="CPF" required />
                 <Input {...register("rg")} label="RG" required />
 
@@ -201,36 +201,20 @@ export function CadastrarAlunos({
                   label="Data de nascimento"
                   required
                 />
-                {/* <Controller
-                  name="dataNascimento"
-                  control={control}
-                  render={({ field: { name, onBlur, onChange, ref } }) => (
-                    <I18nProvider locale="pt-br">
-                      <DateInput
-                        name={name}
-                        onBlur={onBlur}
-                        ref={ref}
-                        onChange={onChange}
-                        label="Data de nascimento"
-                        isRequired
-                      />
-                    </I18nProvider>
-                  )}
-                /> */}
 
                 <Input
                   {...register("naturalidade")}
-                  label="naturalidade"
+                  label="Naturalidade"
                   required
                 />
-                <Input {...register("estado")} label="estado" required />
-                <Input {...register("endereco")} label="endereço" required />
-                <Input {...register("bairro")} label="bairro" required />
-                <Input {...register("cep")} label="cep" required />
-                <Input {...register("escola")} label="escola" required />
+                <Input {...register("estado")} label="Estado" required />
+                <Input {...register("endereco")} label="Endereço" required />
+                <Input {...register("bairro")} label="Bairro" required />
+                <Input {...register("cep")} label="CEP" required />
+                <Input {...register("escola")} label="Escola" required />
                 <Input
                   {...register("serieEscola")}
-                  label="série da escola"
+                  label="Série da escola"
                   required
                 />
                 <Input
@@ -240,17 +224,17 @@ export function CadastrarAlunos({
                 />
                 <Input
                   {...register("responsavel")}
-                  label="Nome do responsavel"
+                  label="Nome do Responsável"
                   required
                 />
                 <Input
                   {...register("rgResponsavel")}
-                  label="Rg do responsavel"
+                  label="Rg do Responsável"
                   required
                 />
                 <Input
                   {...register("cpfResponsavel")}
-                  label="CPF do responsavel"
+                  label="CPF do Responsável"
                   required
                 />
                 <Input

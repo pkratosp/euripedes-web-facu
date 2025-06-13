@@ -7,7 +7,7 @@ export default async function Matriculas() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold">Matriculas</h2>
+      <h2 className="text-2xl font-bold">Matrículas</h2>
 
       <ContainerMatricula token={session?.access_token ?? ""} />
     </div>
